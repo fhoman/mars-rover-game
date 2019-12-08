@@ -1,0 +1,64 @@
+
+body {
+
+background-color: yellowgreen;
+
+
+}
+
+div.grid-container {
+
+display: grid;
+grid-template-columns: auto auto auto auto auto auto auto auto auto auto;
+
+}
+
+div.grid-item {
+
+background-color: #b22e20;
+margin: 4px;
+padding: 4px;
+text-align: center;
+font-size: 20px;
+font-weight: 900;
+color: white;
+height: 40px;
+width: 40px;
+
+
+}
+
+
+div.black {
+
+  background-color: black;
+
+}
+
+div.blue {
+
+  background-color: rgb(75, 14, 243);
+
+}
+
+span.control {
+display: inline-block;
+background-color: #b22e20;
+border: #b22e20;
+color: white;
+margin: 10px;
+padding: 10px;
+cursor: pointer;
+text-align: center;
+
+}
+
+span:hover.control {
+  display: inline-block;
+  background-color: rgb(194, 97, 97);
+  border: rgb(194, 97, 97);
+  color: black;
+  margin: 10px;
+  padding: 10px;
+  
+  }
