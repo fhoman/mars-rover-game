@@ -224,15 +224,30 @@ createHTML(gridArr,roverObj);
 // Add obstacles to the grid
 // ======================
 function addObstacles(gridArray){
+
+const randArr = [];
 for (let i = 0; i < gridArray.length; i++){
+console.log(gridArray);
 
-if (i % 6 === 0 && i !== 0) {
+if (gridArray[i].x !== 0 && gridArray[i].y !== 0) {
+gridArray[Math.floor(Math.random() * gridArray.length)].o = true;
 
-gridArray[i].o = true;
+randArr.push(gridArray[Math.floor(Math.random() * gridArray.length)]);
+
+}
+
+if (randArr.length > 15) {
+
+return 
+
+
+}
 
 }
 }
-}
+
+
+
 
 // Check for obstacles
 // ======================
