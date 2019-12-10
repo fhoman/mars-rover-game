@@ -31,13 +31,17 @@ width: 40px;
 
 div.black {
 
-  background-color: black;
+background: url(https://previews.123rf.com/images/mantinov/mantinov1508/mantinov150800147/44128392-stone-road-rocky-road-pebble-road-as-background.jpg);
+background-size: cover;
+background-position: center;
 
 }
 
 div.blue {
 
-  background-color: rgb(75, 14, 243);
+background: url(https://img.favpng.com/25/4/21/moon-rock-impact-crater-planet-illustration-png-favpng-8m07b0nPqfcy2Ugcg5fXyHtJJ.jpg);
+background-size: cover;
+background-position: center;
 
 }
 
