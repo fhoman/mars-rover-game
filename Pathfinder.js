@@ -236,7 +236,7 @@ randArr.push(gridArray[Math.floor(Math.random() * gridArray.length)]);
 
 }
 
-if (randArr.length > 15) {
+if (randArr.length > 10) {
 
 return 
 
