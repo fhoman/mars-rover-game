@@ -357,7 +357,7 @@ gridArr[i].explosion = true;
 // Game over setup 
 
 function gameOverSetup() {
-
+  $('#reset').show();
 $('#control-container').hide();
 $('#reset').html('<span class="control" id="restart">Start again</span>')
 

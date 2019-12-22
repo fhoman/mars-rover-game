@@ -28,6 +28,13 @@ width: 40px;
 
 }
 
+div#reset {
+
+display: flex;
+justify-content: center;
+
+}
+
 
 div.black {
 
