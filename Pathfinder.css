@@ -45,6 +45,15 @@ background-position: center;
 
 }
 
+div.explosion {
+
+background-image: url(https://www.pngkey.com/png/full/18-185446_fire-clipart-png-file-tag-list-fire-clip.png);
+background-size: cover;
+background-position: center;
+
+}
+
+
 span.control {
 display: inline-block;
 background-color: #b22e20;

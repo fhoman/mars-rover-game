@@ -1,12 +1,15 @@
 
 // Rover Object 
 // ======================
-const roverObj = {direction:'N',x:0,y:0,travellog:[]}
+var roverObj = {direction:'N',x:0,y:0,o:false,explosion:false,travellog:[]}
 
-// Initiate HTML grid
+// Initialize game
 // ======================
+
+
 var gridArr = createGridItems();
 createHTML(gridArr,roverObj);
+
 
 // Create array with coordinates and obstacles for the Mars grid
 // ======================
@@ -16,7 +19,7 @@ var gridArr = [];
 for (var i = 0; i < 10; i++) {
   for (var j = 0; j < 10; j++) {
     
-  gridArr.push({'x':i,'y':j,'o':false});
+  gridArr.push({'x':i,'y':j,'o':false,'explosion':false});
 
   }
 }
@@ -33,11 +36,19 @@ grid.innerHTML = '';
 
 for (let i = 0; i < gridArr.length; i++ ) {
   var divElement = document.createElement("div")
-  divElement.id = `${gridArr[i].x},${gridArr[i].y}`;
+  divElement.id = `${gridArr[i].x}-${gridArr[i].y}`;
   
 grid.appendChild(divElement);
 
- if (rover.x === gridArr[i].x && rover.y === gridArr[i].y && rover.direction === 'N') {
+if (rover.explosion === true && gridArr[i].explosion === true) {
+
+  divElement.className = 'grid-item explosion';
+ gameOverSetup();
+  
+
+}
+
+else  if (rover.x === gridArr[i].x && rover.y === gridArr[i].y && rover.direction === 'N') {
 
 divElement.className = 'grid-item';
 divElement.innerHTML = '&#8657;'
@@ -125,6 +136,12 @@ rover.travellog.push({"x":rover.x,"y":rover.y})
        if (rover.x > 0 && !checkObstacles(gridArray,rover,'x',-1)) {
         rover.x-- 
         }
+      else if (checkObstacles(gridArray,rover,'x',-1)) {
+        rover.x--
+        rover.explosion = true
+        setExplosion(rover);
+          
+      }
         else {
         alert("You can't go forward")
         }
@@ -133,6 +150,12 @@ rover.travellog.push({"x":rover.x,"y":rover.y})
       if (rover.y > 0 && !checkObstacles(gridArray,rover,'y',-1)) {
          rover.y-- 
         }
+      else if (checkObstacles(gridArray,rover,'y',-1)) {
+          rover.y--     
+          rover.explosion = true
+          setExplosion(rover);
+        
+         }
         else {
         alert("You can't go forward")
         }
@@ -141,6 +164,13 @@ rover.travellog.push({"x":rover.x,"y":rover.y})
       if (rover.x < 9 && !checkObstacles(gridArray,rover,'x',1)) {
        rover.x++ 
         }
+        else if (checkObstacles(gridArray,rover,'x',1)) {
+        
+          rover.x++ 
+          rover.explosion = true;
+          setExplosion(rover);
+         
+         }
         else {
         alert("You can't go forward")
         }
@@ -149,6 +179,12 @@ rover.travellog.push({"x":rover.x,"y":rover.y})
       if (rover.y < 9 && !checkObstacles(gridArray,rover,'y',1)) {
         rover.y++
         }
+        else if (checkObstacles(gridArray,rover,'y',1)) {
+          rover.y++
+          rover.explosion = true;  
+          setExplosion(rover);
+           
+         }
         else {
         alert("You can't go forward")
         }
@@ -163,6 +199,12 @@ function moveBackward(rover,gridArray){
       if (rover.x < 9 && !checkObstacles(gridArray,rover,'x',1)) {
           rover.x++
       }
+      else if (checkObstacles(gridArray,rover,'x',1)) {
+        rover.x++
+        rover.explosion = true;
+        setExplosion(rover);
+       
+       }
       else {
           alert("you can't go backward")
       }
@@ -171,6 +213,12 @@ function moveBackward(rover,gridArray){
       if (rover.y < 9 && !checkObstacles(gridArray,rover,'y',1)) {
           rover.y++
         }
+        else if (checkObstacles(gridArray,rover,'y',1)) {
+          rover.y++
+          rover.explosion = true;
+          setExplosion(rover);
+        
+         }
       else {
       alert("you can't go backward")
         } 
@@ -179,6 +227,12 @@ function moveBackward(rover,gridArray){
       if (rover.x > 0 && !checkObstacles(gridArray,rover,'x',-1)) {
            rover.x--
         }
+        else if (checkObstacles(gridArray,rover,'x',-1)) {
+          rover.x--
+          rover.explosion = true;
+          setExplosion(rover);
+            
+         }
       else {
       alert("you can't go backward")
         } 
@@ -187,6 +241,12 @@ function moveBackward(rover,gridArray){
       if (rover.y > 0 && !checkObstacles(gridArray,rover,'y',-1)) {
             rover.y--
         }
+        else if (checkObstacles(gridArray,rover,'y',-1)) {
+          rover.y--
+          rover.explosion = true;
+          setExplosion(rover);
+         
+         }
       else {
       alert("you can't go backward")
       } 
@@ -211,10 +271,12 @@ createHTML(gridArr,roverObj);
 else if (event.target.id === 'F' ){
 moveForward(roverObj,gridArr);
 createHTML(gridArr,roverObj);
+console.log(gridArr);
 }
 else if (event.target.id === 'B' ){            
 moveBackward(roverObj,gridArr);
 createHTML(gridArr,roverObj);
+console.log(gridArr);
 }     
 })
 
@@ -227,9 +289,16 @@ function addObstacles(gridArray){
 
 const randArr = [];
 for (let i = 0; i < gridArray.length; i++){
-console.log(gridArray);
 
-if (gridArray[i].x !== 0 && gridArray[i].y !== 0) {
+
+if (gridArray[i].x === 0 && gridArray[i].y === 0) {
+
+console.log('cant generate obstacle here');
+
+}
+
+else {
+
 gridArray[Math.floor(Math.random() * gridArray.length)].o = true;
 
 randArr.push(gridArray[Math.floor(Math.random() * gridArray.length)]);
@@ -240,13 +309,9 @@ if (randArr.length > 10) {
 
 return 
 
-
-}
-
 }
 }
-
-
+}
 
 
 // Check for obstacles
@@ -257,10 +322,60 @@ var movement;
 console.log('check obstacles')
 return gridArray.some(function(element){
 if (axis === 'x') {
+
 return (rover.x + movement) === element.x && rover.y === element.y && element.o === true;
+
+
 }
 else if (axis === 'y'){
+
 return rover.x === element.x && (rover.y + movement) === element.y && element.o === true;
 }
 })
+}
+
+// Set exploded obstacle
+
+function setExplosion(rover) {
+
+console.log(rover);
+for (let i=0; i < gridArr.length; i++) {
+
+if (rover.x === gridArr[i].x && rover.y === gridArr[i].y) {
+
+gridArr[i].explosion = true;
+
+}
+
+
+}
+
+
+
+}
+
+// Game over setup 
+
+function gameOverSetup() {
+
+$('#control-container').hide();
+$('#reset').html('<span class="control" id="restart">Start again</span>')
+
+alert('your rover exploded. Game over')
+
+document.getElementById('reset').addEventListener('click',function(){
+
+console.log('reset');
+
+gridArr = [];
+roverObj = {direction:'N',x:0,y:0,o:false,explosion:false,travellog:[]}
+
+gridArr = createGridItems();
+createHTML(gridArr,roverObj);
+
+$('#control-container').show();
+$('#reset').hide();
+
+})
+
 }
