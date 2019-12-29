@@ -1,17 +1,29 @@
 
-// Rover Object 
+$( document ).ready(function() {
+  console.log( "ready!" );
+
+
+
+// Declare variables
+
+var counter = 0;
+var player = 0;
+const grid = document.getElementById("grid")
+
+
+// Set rover Object 
 // ======================
-var roverObj = {direction:'N',x:0,y:0,o:false,explosion:false,travellog:[]}
+var roverObj = [{player: 1,active:true,direction:'N',x:0,y:0,o:false,explosion:false,travellog:[]},{player: 2,active:false,direction:'S',x:9,y:9,o:false,explosion:false,travellog:[]}]
 
 // Initialize game
 // ======================
 
-
 var gridArr = createGridItems();
 createHTML(gridArr,roverObj);
+$('#player-warning').hide();
 
 
-// Create array with coordinates and obstacles for the Mars grid
+// Generate array with coordinates and obstacles for the Mars grid
 // ======================
 function createGridItems(rover){
 var gridArr = [];
@@ -27,67 +39,136 @@ addObstacles(gridArr);
 return gridArr;
 }
 
-// Create html Grid
+// Generate html Grid
 // ======================
 function createHTML(gridArr,rover){
-const grid = document.getElementById("grid")
 grid.innerHTML = '';
+var roverID = '';
+var explosionID = '';
 
+
+console.log(player);
 
 for (let i = 0; i < gridArr.length; i++ ) {
-  var divElement = document.createElement("div")
-  divElement.id = `${gridArr[i].x}-${gridArr[i].y}`;
-  
+
+var divElement = document.createElement("div")
+    
+divElement.id = `${gridArr[i].x}-${gridArr[i].y}`;
 grid.appendChild(divElement);
 
-if (rover.explosion === true && gridArr[i].explosion === true) {
 
-  divElement.className = 'grid-item explosion';
- gameOverSetup();
+
+if (gridArr[i].o === true) {
+
+  divElement.className = 'grid-item obstacle';
   
-
-}
-
-else  if (rover.x === gridArr[i].x && rover.y === gridArr[i].y && rover.direction === 'N') {
-
-divElement.className = 'grid-item';
-divElement.innerHTML = '&#8657;'
-
-}
-
-else if (rover.x === gridArr[i].x && rover.y === gridArr[i].y && rover.direction === 'E') {
-
-divElement.className = 'grid-item';
-divElement.innerHTML = '&#8658;'
+      }
+  
+  else {
+  
+  divElement.className = 'grid-item road';
   
   }
+  }
+// Generate html for the active player
 
-else if (rover.x === gridArr[i].x && rover.y === gridArr[i].y && rover.direction === 'W') {
+activePlayerID = `${rover[player].x}-${rover[player].y}`;
+var activePlayerElement;
+activePlayerElement = document.getElementById(activePlayerID);
+  
+// Generate the html for the rovers 
 
-divElement.className = 'grid-item';
-divElement.innerHTML = '&#8656;'
-    
-    }
+for (let i =0; i < rover.length; i++ ){
+  
 
-else if (rover.x === gridArr[i].x && rover.y === gridArr[i].y && rover.direction === 'S') {
+roverID = `${rover[i].x}-${rover[i].y}`;
 
-divElement.className = 'grid-item';
-divElement.innerHTML = '&#8659;'
-      
-    }
-    
-else if (gridArr[i].o === true) {
+console.log(roverID);
 
-divElement.className = 'grid-item blue';
+var roverElement;
 
-    }
+roverElement = document.getElementById(roverID)
+roverElement.innerHTML = '';
 
-else {
 
-divElement.className = 'grid-item black';
+
+if (rover[i].direction === 'N') {
+
+  roverElement.className = 'grid-item rover north';
+  
+  if (rover[i].active === true) {
+
+    roverElement.className = 'grid-item rover north active';
+
+  }
+
 
 }
+
+else if (rover[i].direction === 'E') {
+
+  roverElement.className = 'grid-item rover east';
+
+  if (rover[i].active === true) {
+
+    roverElement.className = 'grid-item rover east active';
+    
+  }
+  
+
 }
+else if (rover[i].direction === 'W') {
+
+ 
+  roverElement.className = 'grid-item rover west';
+  if (rover[i].active === true) {
+
+    roverElement.className = 'grid-item rover west active';
+    
+  }
+
+  
+}
+
+else if (rover[i].direction === 'S') {
+
+
+  roverElement.className = 'grid-item rover south';
+  if (rover[i].active === true) {
+ 
+    roverElement.className = 'grid-item rover south active';
+
+    
+  }
+
+  
+}
+
+}
+
+
+// Generate HTML for the explosion
+
+for (let i = 0; i < gridArr.length; i++ ) {
+
+if (rover[player].explosion === true && gridArr[i].explosion === true) {
+ 
+  explosionID = `${rover[player].x}-${rover[player].y}`;
+console.log(explosionID);
+
+var explosionElement;
+explosionElement = document.getElementById(explosionID)
+explosionElement.innerHTML = '';
+explosionElement.className = 'grid-item explosion';
+  
+   gameOverSetup();
+    
+  }
+  }
+
+
+
+
 }
 
 // Direction functions
@@ -109,13 +190,14 @@ function turnLeft(rover){
         break;
     }
 rover.travellog.push({"x":rover.x,"y":rover.y})
+
   }
   
   function turnRight(rover){
  
     switch(rover.direction){
       case "N": 
-        rover.direction = 'E'
+        rove.direction = 'E'
         break;
       case "E": 
         rover.direction = 'S'
@@ -128,9 +210,12 @@ rover.travellog.push({"x":rover.x,"y":rover.y})
         break;
     }
 rover.travellog.push({"x":rover.x,"y":rover.y})
+
   }
   
   function moveForward(rover,gridArray){
+
+   
     switch(rover.direction){
       case "N":        
        if (rover.x > 0 && !checkObstacles(gridArray,rover,'x',-1)) {
@@ -143,7 +228,7 @@ rover.travellog.push({"x":rover.x,"y":rover.y})
           
       }
         else {
-        alert("You can't go forward")
+          generateWarningMessage(`You can't go forward player ${player+1}!`)
         }
         break;
       case "W": 
@@ -157,7 +242,7 @@ rover.travellog.push({"x":rover.x,"y":rover.y})
         
          }
         else {
-        alert("You can't go forward")
+          generateWarningMessage(`You can't go forward player ${player+1}!`)
         }
         break;  
       case "S": 
@@ -172,7 +257,7 @@ rover.travellog.push({"x":rover.x,"y":rover.y})
          
          }
         else {
-        alert("You can't go forward")
+          generateWarningMessage(`You can't go forward player ${player+1}!`)
         }
       break; 
       case "E": 
@@ -186,14 +271,18 @@ rover.travellog.push({"x":rover.x,"y":rover.y})
            
          }
         else {
-        alert("You can't go forward")
+          generateWarningMessage(`You can't go forward player ${player+1}!`)
         }
       break;
     }
     rover.travellog.push({"x":rover.x,"y":rover.y})
+    
   }
   
 function moveBackward(rover,gridArray){
+
+
+  
   switch(rover.direction){
       case "N": 
       if (rover.x < 9 && !checkObstacles(gridArray,rover,'x',1)) {
@@ -206,7 +295,7 @@ function moveBackward(rover,gridArray){
        
        }
       else {
-          alert("you can't go backward")
+        generateWarningMessage(`You can't go backward player ${player+1}!`)
       }
       break;
       case "W": 
@@ -220,7 +309,7 @@ function moveBackward(rover,gridArray){
         
          }
       else {
-      alert("you can't go backward")
+        generateWarningMessage(`You can't go backward player ${player+1}!`)
         } 
       break;  
       case "S": 
@@ -234,7 +323,7 @@ function moveBackward(rover,gridArray){
             
          }
       else {
-      alert("you can't go backward")
+        generateWarningMessage(`You can't go backward player ${player+1}!`)
         } 
       break; 
       case "E": 
@@ -248,69 +337,158 @@ function moveBackward(rover,gridArray){
          
          }
       else {
-      alert("you can't go backward")
+        
+        generateWarningMessage(`You can't go backward player ${player+1}!`)
+        
       } 
       break;
     }
    
  rover.travellog.push({"x":rover.x,"y":rover.y})
+
+
   }
 
 // Event listener for control buttons mars rover
 // ======================
 document.getElementById('control-container').addEventListener('click',function(event){
-
+  $('#player-warning').hide();
+  $('#player-message').show();
 if (event.target.id === 'L'){
-turnLeft(roverObj);
+turnLeft(roverObj[player]);
 createHTML(gridArr,roverObj);
    }
 else if (event.target.id === 'R' ) {
-turnRight(roverObj);
+turnRight(roverObj[player]);
 createHTML(gridArr,roverObj);
 }
 else if (event.target.id === 'F' ){
-moveForward(roverObj,gridArr);
+moveForward(roverObj[player],gridArr);
+setPlayer(roverObj);
 createHTML(gridArr,roverObj);
-console.log(gridArr);
+
+
 }
 else if (event.target.id === 'B' ){            
-moveBackward(roverObj,gridArr);
+moveBackward(roverObj[player],gridArr);
+setPlayer(roverObj);
 createHTML(gridArr,roverObj);
-console.log(gridArr);
+
+
 }     
 })
+
+
+// Game over setup 
+
+function gameOverSetup() {
+
+
+$('#reset').show();
+$('#control-container').hide();
+$('#reset').html('<span class="control" id="restart">Start again</span>')
+
+generateWarningMessage(`The rover of player ${player+1} exploded. Player ${setPlayer(roverObj)} has won the game`);
+
+
+
+document.getElementById('reset').addEventListener('click',function(){
+$('#player-warning').hide();
+$('#player-message').show();
+$('#player-message').html("It's your turn player 1");
+
+gridArr = [];
+roverObj = [{direction:'N',x:0,y:0,o:false,explosion:false,travellog:[]},{direction:'S',x:9,y:9,o:false,explosion:false,travellog:[]}]
+counter = 0;
+player = 0;
+
+gridArr = createGridItems();
+createHTML(gridArr,roverObj);
+$('#control-container').show();
+$('#reset').hide();
+
+
+})
+
+}
 
 // Helper functions
 // ======================
 
-// Add obstacles to the grid
-// ======================
-function addObstacles(gridArray){
+// Change turn player
 
-const randArr = [];
-for (let i = 0; i < gridArray.length; i++){
+function setPlayer(rover) {
+
+  
+var messageElement;
+messageElement = document.getElementById('player-message');
+messageElement.innerHTML = '';
+
+counter++
 
 
-if (gridArray[i].x === 0 && gridArray[i].y === 0) {
+if (counter % 2 === 0) {
 
-console.log('cant generate obstacle here');
+player = 0;
+rover[0].active = true;
+rover[1].active = false;
+messageElement.innerHTML = "It's your turn player 1";
+console.log(roverObj);
+return 1;
 
 }
 
 else {
 
-gridArray[Math.floor(Math.random() * gridArray.length)].o = true;
-
-randArr.push(gridArray[Math.floor(Math.random() * gridArray.length)]);
+player = 1;
+rover[0].active = false;
+rover[1].active = true;
+messageElement.innerHTML = "It's your turn player 2";
+console.log(roverObj);
+return 2;
 
 }
 
+}
+
+// Generate warning message
+
+function generateWarningMessage(message) {
+
+  $('#player-message').hide();
+  $('#player-warning').show();
+
+$('#player-warning').html('');
+$('#player-warning').html(message);
+
+
+}
+
+
+
+// Add obstacles to the grid
+// ======================
+
+function addObstacles(gridArray){
+
+const randArr = [];
+for (let i = 1; i < gridArray.length; i++){
+
+gridArray[Math.floor(Math.random() * gridArray.length)].o = true;
+
+randArr.push(1);
+
 if (randArr.length > 10) {
 
+gridArray[0].o = false;
+gridArray[99].o = false;
 return 
 
 }
 }
+
+
+
 }
 
 
@@ -338,7 +516,7 @@ return rover.x === element.x && (rover.y + movement) === element.y && element.o 
 
 function setExplosion(rover) {
 
-console.log(rover);
+
 for (let i=0; i < gridArr.length; i++) {
 
 if (rover.x === gridArr[i].x && rover.y === gridArr[i].y) {
@@ -354,28 +532,4 @@ gridArr[i].explosion = true;
 
 }
 
-// Game over setup 
-
-function gameOverSetup() {
-  $('#reset').show();
-$('#control-container').hide();
-$('#reset').html('<span class="control" id="restart">Start again</span>')
-
-alert('your rover exploded. Game over')
-
-document.getElementById('reset').addEventListener('click',function(){
-
-console.log('reset');
-
-gridArr = [];
-roverObj = {direction:'N',x:0,y:0,o:false,explosion:false,travellog:[]}
-
-gridArr = createGridItems();
-createHTML(gridArr,roverObj);
-
-$('#control-container').show();
-$('#reset').hide();
-
-})
-
-}
+});
