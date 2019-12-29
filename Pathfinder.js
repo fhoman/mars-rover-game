@@ -364,16 +364,16 @@ createHTML(gridArr,roverObj);
 }
 else if (event.target.id === 'F' ){
 moveForward(roverObj[player],gridArr);
+createHTML(gridArr,roverObj);
 setPlayer(roverObj);
 createHTML(gridArr,roverObj);
-
 
 }
 else if (event.target.id === 'B' ){            
 moveBackward(roverObj[player],gridArr);
+createHTML(gridArr,roverObj);
 setPlayer(roverObj);
 createHTML(gridArr,roverObj);
-
 
 }     
 })
@@ -398,7 +398,7 @@ $('#player-message').show();
 $('#player-message').html("It's your turn player 1");
 
 gridArr = [];
-roverObj = [{direction:'N',x:0,y:0,o:false,explosion:false,travellog:[]},{direction:'S',x:9,y:9,o:false,explosion:false,travellog:[]}]
+roverObj = [{player: 1,active:true,direction:'N',x:0,y:0,o:false,explosion:false,travellog:[]},{player: 2,active:false,direction:'S',x:9,y:9,o:false,explosion:false,travellog:[]}]
 counter = 0;
 player = 0;
 
@@ -418,14 +418,12 @@ $('#reset').hide();
 // Change turn player
 
 function setPlayer(rover) {
-
   
 var messageElement;
 messageElement = document.getElementById('player-message');
 messageElement.innerHTML = '';
 
 counter++
-
 
 if (counter % 2 === 0) {
 
