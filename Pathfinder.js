@@ -70,11 +70,7 @@ if (gridArr[i].o === true) {
   
   }
   }
-// Generate html for the active player
 
-activePlayerID = `${rover[player].x}-${rover[player].y}`;
-var activePlayerElement;
-activePlayerElement = document.getElementById(activePlayerID);
   
 // Generate the html for the rovers 
 
